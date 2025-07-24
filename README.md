@@ -1,10 +1,10 @@
-# RealtimeVoiceChat 
+# VoiceChatEngine 
 
 A high-performance Python framework for OpenAI's Realtime API, featuring a unique dual-lane architecture that balances ultra-low latency with rich functionality.
 
 ## 🎯 Overview
 
-RealtimeVoiceAPI provides a modern, production-ready interface for building real-time voice applications with OpenAI's Realtime API. The framework's innovative dual-lane architecture allows developers to choose between maximum performance (Fast Lane) or full features (Big Lane).
+VoiceChatEngine provides a modern, production-ready interface for building real-time voice applications with OpenAI's Realtime API. The framework's innovative dual-lane architecture allows developers to choose between maximum performance (Fast Lane) or full features (Big Lane).
 
 ### Key Features
 
@@ -46,11 +46,11 @@ pip install realtimevoiceapi
 
 ```python
 import asyncio
-from realtimevoiceapi import VoiceEngine
+from voicechatengine import VoiceChatEngine
 
 async def main():
     # Create engine
-    engine = VoiceEngine(api_key="your-openai-api-key")
+    engine = VoiceChatEngine(api_key="your-openai-api-key")
     
     # Set up callbacks
     engine.on_text_response = lambda text: print(f"AI: {text}")
@@ -69,7 +69,8 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from realtimevoiceapi import VoiceEngine, VoiceEngineConfig
+from voicechatengine import VoiceChatEngine, VoiceEngineConfig
+
 
 async def main():
     # Configure engine
@@ -82,7 +83,7 @@ async def main():
         latency_mode="ultra_low"
     )
     
-    engine = VoiceEngine(config=config)
+    engine = VoiceChatEngine(config=config)
     
     # Set up comprehensive callbacks
     engine.on_audio_response = lambda audio: print(f"Received {len(audio)} bytes")

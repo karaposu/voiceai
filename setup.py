@@ -4,11 +4,11 @@ import subprocess
 import os
 
 setup(
-    name='voiceai',  # Package name
-    version='0.0.1',  # Version of your package
-    author='enes',  # Your name
+    name='voicechatengine',  # Package name
+    version='0.0.0',  # Version of your package
+    author='enes kuzucu',  # Your name
     
-    description='aivoice usage made easy',  # Short description
+    description='A production-ready Python framework for building real-time AI voice chat applications using OpenAI s Realtime API ', 
     long_description=open('README.md').read(),  # Long description from a README file
     long_description_content_type='text/markdown',  # Type of the long description
     
