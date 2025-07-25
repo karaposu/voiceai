@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/core/provider_protocol.py
+# here is voicechatengine/core/provider_protocol.py
 
 """
 Provider Protocol Definitions
@@ -14,7 +14,7 @@ from enum import Enum
 from datetime import datetime
 
 from .stream_protocol import StreamCapabilities, StreamEvent, StreamConfig
-from audioengine.audioengine.audio_types import AudioFormat
+from ..audioengine.audioengine.audio_types import AudioFormat
 
 
 # ============== Provider Capabilities ==============

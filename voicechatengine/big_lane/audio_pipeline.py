@@ -1,6 +1,7 @@
-# here is realtimevoiceapi/big_lane/audio_pipeline.py
+# here is voicechatengine/big_lane/audio_pipeline.py
 
 """
+
 Audio Pipeline - Big Lane Component
 
 Composable audio processing pipeline with pluggable processors.
@@ -17,9 +18,9 @@ from enum import Enum
 
 import numpy as np
 
-from audioengine.audioengine.audio_types import AudioBytes, AudioConfig, AudioMetadata
-from audioengine.audioengine.audio_processor import AudioProcessor as BaseAudioProcessor
-from realtimevoiceapi.core.exceptions import AudioError
+from voicechatengine.audioengine.audioengine.audio_types import AudioBytes, AudioConfig, AudioMetadata
+from voicechatengine.audioengine.audioengine.audio_processor import AudioProcessor as BaseAudioProcessor
+from voicechatengine.core.exceptions import AudioError
 
 
 class ProcessorPriority(Enum):

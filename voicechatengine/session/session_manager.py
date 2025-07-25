@@ -1,5 +1,5 @@
 
-# here is realtimevoiceapi/session_manager.py
+# here is voicechatengine/session_manager.py
 
 """
 Session State Management

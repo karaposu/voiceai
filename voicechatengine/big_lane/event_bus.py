@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/big_lane/event_bus.py
+# here is voicechatengine/big_lane/event_bus.py
 
 """
 Event Bus System - Big Lane Component

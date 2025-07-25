@@ -1,6 +1,8 @@
 """
 Test 06: VoiceEngine Setup
 Tests VoiceEngine creation and configuration.
+
+python -m voicechatengine.smoke_tests.test_06_voice_engine_setup
 """
 
 import sys
@@ -9,7 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import asyncio
 import logging
-from realtimevoiceapi.voice_engine import VoiceEngine, VoiceEngineConfig
+from ..voice_engine import VoiceEngine, VoiceEngineConfig
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

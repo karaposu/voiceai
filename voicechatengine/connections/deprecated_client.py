@@ -1,4 +1,4 @@
-# realtimevoiceapi/connections/client.py
+# voicechatengine/connections/client.py
 """
 Main RealtimeClient for OpenAI Realtime API
 

@@ -1,6 +1,8 @@
 """
 Test 03: AudioEngine Streaming
 Tests audio capture and playback functionality through AudioEngine.
+
+python -m voicechatengine.smoke_tests.test_03_audio_engine_streaming
 """
 
 import sys
@@ -10,8 +12,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 import asyncio
 import time
 import numpy as np
-from audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from audioengine.audioengine.audio_types import (
+from ..audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
+from ..audioengine.audioengine.audio_types import (
     AudioConfig, ProcessingMode, AudioBytes, VADConfig, VADType
 )
 

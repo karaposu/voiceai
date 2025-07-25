@@ -1,5 +1,5 @@
 
-# here is realtimevoiceapi/core/stream_protocol.py
+# here is voicechatengine/core/stream_protocol.py
 
 """
 Stream Protocol Definitions

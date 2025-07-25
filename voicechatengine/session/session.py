@@ -1,4 +1,4 @@
-# realtimevoiceapi/session.py
+# voicechatengine/session.py
 """Session configuration and management for OpenAI Realtime API"""
 
 import logging
@@ -10,7 +10,7 @@ from typing import List, Optional, Dict, Any, Union
 from ..config import Identity, IDENTITIES, DEFAULT_ASSISTANT
 
 # TODO: These models need to be implemented
-# from realtimevoiceapi.audio.models import (
+# from voicechatengine.audio.models import (
 #     AudioFormatType, ModalityType, VoiceType, ToolChoiceType,
 #     TurnDetectionConfig, TranscriptionConfig, Tool
 # )

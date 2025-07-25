@@ -1,6 +1,9 @@
 """
 Test 02: AudioEngine Processing
 Tests audio processing capabilities including format conversion, validation, and enhancement.
+
+
+python -m voicechatengine.smoke_tests.test_02_audio_engine_processing
 """
 
 import sys
@@ -9,12 +12,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import time
 import numpy as np
-from audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from audioengine.audioengine.audio_types import (
+from ..audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
+from ..audioengine.audioengine.audio_types import (
     AudioConfig, ProcessingMode, AudioBytes, AudioFormat,
     VADConfig, VADType
 )
-from audioengine.audioengine.audio_processor import AudioProcessor
+from ..audioengine.audioengine.audio_processor import AudioProcessor
 
 def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000, channels: int = 1) -> AudioBytes:
     """Generate test audio with configurable parameters"""

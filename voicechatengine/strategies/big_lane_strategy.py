@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/strategies/big_lane_strategy.py
+# here is voicechatengine/strategies/big_lane_strategy.py
 
 """
 Big Lane Strategy Implementation

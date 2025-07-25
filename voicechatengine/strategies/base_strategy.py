@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/strategies/base_strategy.py
+# here is voicechatengine/strategies/base_strategy.py
 
 """
 Base Strategy Interface
@@ -11,7 +11,7 @@ from typing import Optional, Dict, Any, List, AsyncIterator, Callable
 from dataclasses import dataclass
 
 from ..core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from audioengine.audioengine.audio_types import AudioBytes
+from ..audioengine.audioengine.audio_types import AudioBytes
 from ..core.provider_protocol import Usage, Cost
 
 

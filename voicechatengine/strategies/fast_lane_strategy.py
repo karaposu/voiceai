@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/strategies/fast_lane_strategy.py
+# here is voicechatengine/strategies/fast_lane_strategy.py
 
 """
 Fast Lane Strategy Implementation
@@ -14,7 +14,7 @@ import logging
 
 from .base_strategy import BaseStrategy, EngineConfig
 from ..core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from audioengine.audioengine.audio_types import AudioBytes, AudioConfig, VADConfig, VADType
+from ..audioengine.audioengine.audio_types import AudioBytes, AudioConfig, VADConfig, VADType
 from ..core.provider_protocol import Usage, Cost
 # TODO: These modules need to be created or replaced with AudioEngine equivalents
 # from ..fast_lane.direct_audio_capture import DirectAudioCapture

@@ -1,6 +1,9 @@
 """
 Test 10: Comprehensive Metrics and Cleanup
 Tests metrics collection and resource cleanup across all components.
+
+
+python -m voicechatengine.smoke_tests.test_10_metrics_and_cleanup
 """
 
 import sys
@@ -10,9 +13,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import asyncio
 import time
 import gc
-from realtimevoiceapi.voice_engine import VoiceEngine, VoiceEngineConfig
-from audioengine.audioengine.audio_engine import AudioEngine
-from realtimevoiceapi.base_engine import BaseEngine
+from voicechatengine.voice_engine import VoiceEngine, VoiceEngineConfig
+from voicechatengine.audioengine.audioengine.audio_engine import AudioEngine
+from voicechatengine.base_engine import BaseEngine
 
 # Try to import psutil, but make it optional
 try:

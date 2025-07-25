@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/big_lane/response_aggregator.py
+# here is voicechatengine/big_lane/response_aggregator.py
 
 """
 Response Aggregator - Big Lane Component

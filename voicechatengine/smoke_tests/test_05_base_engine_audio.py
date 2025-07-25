@@ -1,6 +1,8 @@
 """
 Test 05: BaseEngine Audio Integration
 Tests BaseEngine's audio functionality through AudioEngine.
+
+python -m voicechatengine.smoke_tests.test_05_base_engine_audio
 """
 
 import sys
@@ -10,10 +12,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import asyncio
 import logging
 import numpy as np
-from realtimevoiceapi.base_engine import BaseEngine
-from realtimevoiceapi.strategies.base_strategy import EngineConfig
-from realtimevoiceapi.core.stream_protocol import StreamEvent, StreamEventType
-from audioengine.audioengine.audio_types import AudioBytes
+from ..base_engine import BaseEngine
+from ..strategies.base_strategy import EngineConfig
+from ..core.stream_protocol import StreamEvent, StreamEventType
+from ..audioengine.audioengine.audio_types import AudioBytes
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/fast_lane/fast_stream_manager.py
+# here is voicechatengine/fast_lane/fast_stream_manager.py
 
 
 """
@@ -14,14 +14,14 @@ from typing import Optional, Dict, Any, Callable
 from dataclasses import dataclass,field
 import logging
 
-from realtimevoiceapi.core.stream_protocol import (
+from voicechatengine.core.stream_protocol import (
     IStreamManager, StreamState, StreamEvent, StreamEventType,
     StreamMetrics, AudioFormat
 )
-from realtimevoiceapi.connections.websocket_connection import FastLaneConnection
-from realtimevoiceapi.core.message_protocol import MessageFactory, ServerMessageType
-from audioengine.audioengine.audio_types import AudioBytes, AudioConfig
-from realtimevoiceapi.core.exceptions import StreamError
+from voicechatengine.connections.websocket_connection import FastLaneConnection
+from voicechatengine.core.message_protocol import MessageFactory, ServerMessageType
+from voicechatengine.audioengine.audioengine.audio_types import AudioBytes, AudioConfig
+from voicechatengine.core.exceptions import StreamError
 
 
 @dataclass

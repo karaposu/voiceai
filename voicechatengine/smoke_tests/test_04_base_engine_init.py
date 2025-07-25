@@ -1,6 +1,9 @@
 """
 Test 04: BaseEngine Initialization
 Tests BaseEngine creation, strategy setup, and basic initialization without connections.
+
+
+python -m voicechatengine.smoke_tests.test_04_base_engine_init
 """
 
 import sys
@@ -9,9 +12,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import asyncio
 import logging
-from realtimevoiceapi.base_engine import BaseEngine
-from realtimevoiceapi.strategies.base_strategy import EngineConfig
-from realtimevoiceapi.core.stream_protocol import StreamEventType, StreamState
+from ..base_engine import BaseEngine
+from ..strategies.base_strategy import EngineConfig
+from ..core.stream_protocol import StreamEventType, StreamState
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

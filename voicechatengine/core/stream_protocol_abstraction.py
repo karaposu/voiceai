@@ -1,4 +1,4 @@
-#here is realtimevoiceapi/core/stream_protocol_abstraction.py
+#here is voicechatengine/core/stream_protocol_abstraction.py
 
 
 """
@@ -14,7 +14,7 @@ from contextlib import asynccontextmanager
 import time
 
 # Import from existing stream protocol
-from realtimevoiceapi.core.stream_protocol import (
+from voicechatengine.core.stream_protocol import (
     IStreamManager,
     StreamEvent,
     StreamEventType,
@@ -278,7 +278,7 @@ async def example_usage():
     """Show how to use the high-level API with existing stream protocol"""
     
     # Assume we have a stream manager that implements IStreamManager
-    from realtimevoiceapi.fast_lane.fast_stream_manager import FastStreamManager
+    from voicechatengine.fast_lane.fast_stream_manager import FastStreamManager
     
     stream = FastStreamManager(config)
     await stream.start()

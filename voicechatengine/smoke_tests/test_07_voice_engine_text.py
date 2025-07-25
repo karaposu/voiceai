@@ -1,6 +1,8 @@
 """
 Test 07: VoiceEngine Text Interactions
 Tests text-based interactions with REAL OpenAI API connections.
+
+python -m  voicechatengine.smoke_tests.test_07_voice_engine_text
 """
 
 import sys
@@ -9,8 +11,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import asyncio
 import time
-from realtimevoiceapi.voice_engine import VoiceEngine
-from realtimevoiceapi.core.stream_protocol import StreamEventType
+from ..voice_engine import VoiceEngine
+from ..core.stream_protocol import StreamEventType
 
 # Load environment variables from .env file
 from dotenv import load_dotenv

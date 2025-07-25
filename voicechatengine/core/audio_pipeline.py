@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/core/audio_pipeline.py
+# here is voicechatengine/core/audio_pipeline.py
 
 """
 Audio Pipeline for BaseEngine

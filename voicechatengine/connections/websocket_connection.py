@@ -1,5 +1,5 @@
 
-# here is realtimevoiceapi/connections/websocket_connection.py
+# here is voicechatengine/connections/websocket_connection.py
 """
 WebSocket Connection Manager
 

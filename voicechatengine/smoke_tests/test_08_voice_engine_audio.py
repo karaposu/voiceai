@@ -1,6 +1,8 @@
 """
 Test 08: VoiceEngine Audio Interactions
 Tests audio-based interactions with REAL OpenAI API connections.
+
+python -m voicechatengine.smoke_tests.test_08_voice_engine_audio
 """
 
 import sys
@@ -10,8 +12,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import asyncio
 import time
 import numpy as np
-from realtimevoiceapi.voice_engine import VoiceEngine
-from audioengine.audioengine.audio_types import AudioBytes
+from ..voice_engine import VoiceEngine
+from ..audioengine.audioengine.audio_types import AudioBytes
 
 # Load environment variables from .env file
 from dotenv import load_dotenv

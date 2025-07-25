@@ -1,6 +1,8 @@
 """
 Test 09: Full Integration Test
 Tests complete end-to-end flow with real OpenAI API.
+
+python -m voicechatengine.smoke_tests.test_09_full_integration
 """
 
 import sys
@@ -10,7 +12,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import asyncio
 import time
 import numpy as np
-from realtimevoiceapi.voice_engine import VoiceEngine, VoiceEngineConfig
+
+
+from voicechatengine.voice_engine import VoiceEngine, VoiceEngineConfig
 
 # Load environment variables from .env file
 from dotenv import load_dotenv

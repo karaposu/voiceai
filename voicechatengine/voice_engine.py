@@ -16,7 +16,7 @@ from pathlib import Path
 import json
 
 from .core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from audioengine.audioengine.audio_types import AudioBytes
+from .audioengine.audioengine.audio_types import AudioBytes
 from .core.provider_protocol import Usage, Cost
 from .core.exceptions import EngineError
 from .strategies.base_strategy import EngineConfig

@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 
 
 from .core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from audioengine.audioengine.audio_types import AudioBytes
+from .audioengine.audioengine.audio_types import AudioBytes
 from .core.exceptions import EngineError
 from .strategies.base_strategy import BaseStrategy, EngineConfig
 from .strategies.fast_lane_strategy import FastLaneStrategy
@@ -23,8 +23,8 @@ from .strategies.fast_lane_strategy import FastLaneStrategy
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-from audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from audioengine.audioengine.audio_types import AudioConfig, VADConfig, VADType, ProcessingMode
+from .audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
+from .audioengine.audioengine.audio_types import AudioConfig, VADConfig, VADType, ProcessingMode
 
 
 @dataclass

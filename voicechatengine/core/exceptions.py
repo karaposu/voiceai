@@ -1,7 +1,7 @@
-# here is realtimevoiceapi/core/exceptions.py
+# here is voicechatengine/core/exceptions.py
 
 
-"""Custom exceptions for RealtimeVoiceAPI"""
+"""Custom exceptions for voicechatengine"""
 
 class RealtimeError(Exception):
     """Base exception for Realtime API errors"""

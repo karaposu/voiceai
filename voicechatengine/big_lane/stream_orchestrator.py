@@ -1,4 +1,4 @@
-# here is realtimevoiceapi/big_lane/stream_orchestrator.py
+# here is voicechatengine/big_lane/stream_orchestrator.py
 
 
 """
@@ -33,7 +33,7 @@ import logging
 from collections import defaultdict
 
 from .event_bus import EventBus, Event
-from realtimevoiceapi.core.stream_protocol import (
+from voicechatengine.core.stream_protocol import (
     IStreamManager, StreamState, StreamConfig,
     StreamCapabilities, StreamEvent, StreamEventType
 )

@@ -1,6 +1,9 @@
 """
 Test 01: AudioEngine Basics
 Tests the fundamental AudioEngine functionality without external dependencies.
+
+
+python -m voicechatengine.smoke_tests.test_01_audio_engine_basics
 """
 
 import sys
@@ -9,8 +12,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import time
 import numpy as np
-from audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from audioengine.audioengine.audio_types import AudioConfig, ProcessingMode, AudioBytes
+from ..audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
+from ..audioengine.audioengine.audio_types import AudioConfig, ProcessingMode, AudioBytes
 
 def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000) -> AudioBytes:
     """Generate test audio (sine wave)"""

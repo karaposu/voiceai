@@ -13,7 +13,18 @@ setup(
     long_description_content_type='text/markdown',  # Type of the long description
     
     packages=find_packages(),  # Automatically find packages in the directory
-    install_requires=[ 'python-dotenv'],
+    install_requires=[
+        'websockets>=11.0.0',
+        'python-dotenv>=1.0.0',
+        'aiohttp>=3.8.0',
+        'numpy>=1.21.0',
+        'pydub>=0.25.0',
+        'pynput',
+        'scipy>=1.9.0',
+        'matplotlib>=3.5.0',
+        'sounddevice',
+        'soundfile',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',  # Development status
         'Intended Audience :: Developers',
