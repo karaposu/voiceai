@@ -5,7 +5,7 @@ import os
 
 setup(
     name='voicechatengine',  # Package name
-    version='0.0.0',  # Version of your package
+    version='0.0.1',  # Version of your package
     author='enes kuzucu',  # Your name
     
     description='A production-ready Python framework for building real-time AI voice chat applications using OpenAI s Realtime API ', 
