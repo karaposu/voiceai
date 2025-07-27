@@ -19,7 +19,7 @@ from voxstream.config.types import (
 )
 AudioBytes = bytes
 
-def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000) -> AudioBytes:
+def generate_test_audio(duration_ms: int = 100, sample_rate: int = 44100) -> AudioBytes:
     """Generate test audio (sine wave)"""
     duration_s = duration_ms / 1000
     t = np.linspace(0, duration_s, int(sample_rate * duration_s))

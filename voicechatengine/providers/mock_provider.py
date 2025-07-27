@@ -67,11 +67,13 @@ class MockProvider(BaseProvider):
             self.logger.info("Mock provider connecting...")
             
             # Simulate connection delay
-            if self.config.simulate_latency:
+            simulate_latency = getattr(self.config, 'simulate_latency', False)
+            if simulate_latency:
                 await asyncio.sleep(0.5)
             
             # Simulate connection error
-            if random.random() < self.config.error_rate:
+            error_rate = getattr(self.config, 'error_rate', 0.0)
+            if random.random() < error_rate:
                 self.state = ConnectionState.ERROR
                 self.logger.error("Mock connection failed (simulated)")
                 return False
@@ -126,11 +128,13 @@ class MockProvider(BaseProvider):
         }
         self._message_history.append(message)
         
-        if self.config.enable_logging:
+        enable_logging = getattr(self.config, 'enable_logging', False)
+        if enable_logging:
             self.logger.debug(f"Mock received: {message}")
             
         # Simulate message processing
-        if self.config.simulate_latency:
+        simulate_latency = getattr(self.config, 'simulate_latency', False)
+        if simulate_latency:
             await asyncio.sleep(0.05)
             
         # Handle specific message types
@@ -161,8 +165,10 @@ class MockProvider(BaseProvider):
         )
         
         # Auto-respond if user message
-        if role == "user" and self.config.simulate_latency:
-            await asyncio.sleep(0.1)
+        simulate_latency = getattr(self.config, 'simulate_latency', False)
+        if role == "user":
+            if simulate_latency:
+                await asyncio.sleep(0.1)
             await self.create_response()
             
     async def interrupt(self) -> None:
@@ -250,7 +256,8 @@ class MockProvider(BaseProvider):
         """Generate mock response content."""
         try:
             # Simulate initial delay
-            await asyncio.sleep(self.config.response_delay)
+            response_delay = getattr(self.config, 'response_delay', 0.1)
+            await asyncio.sleep(response_delay)
             
             # Start response
             await self._queue_event(ProviderEvent(
@@ -281,7 +288,8 @@ class MockProvider(BaseProvider):
                     ))
                     
                     # Simulate typing delay
-                    if self.config.simulate_latency:
+                    simulate_latency = getattr(self.config, 'simulate_latency', False)
+                    if simulate_latency:
                         await asyncio.sleep(0.05)
                         
             if "audio" in modalities:
@@ -292,7 +300,8 @@ class MockProvider(BaseProvider):
                         break
                         
                     # Create mock audio data
-                    audio_data = bytes(self.config.audio_chunk_size)
+                    audio_chunk_size = getattr(self.config, 'audio_chunk_size', 1024)
+                    audio_data = bytes(audio_chunk_size)
                     
                     await self._queue_event(ProviderEvent(
                         type="audio_chunk",
@@ -302,7 +311,8 @@ class MockProvider(BaseProvider):
                         session_id=self.session_id
                     ))
                     
-                    if self.config.simulate_latency:
+                    simulate_latency = getattr(self.config, 'simulate_latency', False)
+                    if simulate_latency:
                         await asyncio.sleep(0.1)
                         
             # Complete response

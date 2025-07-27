@@ -19,9 +19,8 @@ from .core.exceptions import EngineError
 from .strategies.base_strategy import BaseStrategy, EngineConfig
 from .strategies.fast_lane_strategy import FastLaneStrategy
 
-# Import VoxStream components
-from voxstream import VoxStream as AudioEngine
-from voxstream.core.stream import create_fast_lane_engine
+# Import VoxStream directly
+from voxstream import VoxStream
 from voxstream.config.types import StreamConfig as AudioConfig, VADConfig, ProcessingMode, VADType
 from voxstream.voice.vad import VoiceState
 
@@ -101,7 +100,7 @@ class CoreEngineState:
 class EngineComponents:
     """Container for all engine components"""
     strategy: Optional[BaseStrategy] = None
-    audio_engine: Optional[AudioEngine] = None
+    audio_engine: Optional[VoxStream] = None
     
     # Processing tasks
     audio_processing_task: Optional[asyncio.Task] = None
@@ -252,12 +251,13 @@ class BaseEngine:
     
     # ============== Initialization ==============
     
-    def create_strategy(self, mode: str) -> BaseStrategy:
+    def create_strategy(self, mode: str, use_provider_fast_lane: bool = False) -> BaseStrategy:
         """
         Create appropriate strategy implementation.
         
         Args:
             mode: Either "fast", "big", or "provider"
+            use_provider_fast_lane: Use new provider-based fast lane implementation
             
         Returns:
             Strategy instance
@@ -269,7 +269,14 @@ class BaseEngine:
         self._mode = mode
         
         if mode == "fast":
-            self.components.strategy = FastLaneStrategy(logger=self.logger)
+            if use_provider_fast_lane:
+                # Use new provider-based fast lane
+                from .strategies.fast_lane_strategy_v2 import FastLaneStrategyV2
+                self.logger.info("Creating FastLaneStrategyV2 (provider-based)")
+                self.components.strategy = FastLaneStrategyV2(logger=self.logger)
+            else:
+                # Use original WebSocket-based fast lane
+                self.components.strategy = FastLaneStrategy(logger=self.logger)
         elif mode == "big":
             # TODO: Implement big lane strategy
             raise NotImplementedError(
@@ -325,14 +332,26 @@ class BaseEngine:
                     speech_end_ms=vad_speech_end_ms
                 )
             
-            # Create AudioEngine optimized for fast lane with all configurations
-            self.components.audio_engine = create_fast_lane_engine(
+            # Create VoxStream audio engine
+            audio_config = AudioConfig(
                 sample_rate=sample_rate,
-                chunk_duration_ms=chunk_duration_ms,
-                input_device=input_device,
-                output_device=output_device,
-                vad_config=vad_config
+                channels=1,
+                chunk_duration_ms=chunk_duration_ms
             )
+            
+            self.components.audio_engine = VoxStream(
+                config=audio_config,
+                mode=ProcessingMode.REALTIME
+            )
+            
+            # Configure devices and VAD
+            self.components.audio_engine.configure_devices(
+                input_device=input_device,
+                output_device=output_device
+            )
+            
+            if vad_config:
+                self.components.audio_engine.configure_vad(vad_config)
             
             # Set playback callbacks
             self.components.audio_engine.set_playback_callbacks(
@@ -472,7 +491,7 @@ class BaseEngine:
                         vad_state = self.components.audio_engine.process_vad_chunk(audio_chunk)
                         
                         # Send if speech or no VAD
-                        if not vad_state or vad_state in ["speech_starting", "speech"]:
+                        if not vad_state or vad_state in [VoiceState.SPEECH_STARTING, VoiceState.SPEECH]:
                             await self.components.strategy.send_audio(audio_chunk)
                             self.state.total_audio_chunks_sent += 1
                     
@@ -695,7 +714,7 @@ class BaseEngine:
         if self.components.audio_engine:
             # Process and play audio
             processed = self.components.audio_engine.process_audio(audio_data)
-            # TODO: Add direct playback method to AudioEngine
+            self.components.audio_engine.play_audio(processed)
     
     def _on_audio_playback_complete(self):
         """Called when audio playback completes"""

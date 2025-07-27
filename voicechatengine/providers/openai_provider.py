@@ -141,7 +141,7 @@ class OpenAIProvider(BaseProvider):
                     "type": "message",
                     "role": role,
                     "content": [
-                        {"type": "text", "text": text}
+                        {"type": "input_text", "text": text}
                     ]
                 }
             }

@@ -18,11 +18,11 @@ from voxstream.config.types import StreamConfig as AudioConfig, VADConfig, Proce
 from voxstream.voice.vad import VoiceState
 AudioBytes = bytes  # Simple type alias for audio data
 from ..core.provider_protocol import Usage, Cost
-# TODO: These modules need to be created or replaced with AudioEngine equivalents
-# from ..fast_lane.direct_audio_capture import DirectAudioCapture
-# from ..fast_lane.fast_vad_detector import FastVADDetector,VADState
 
-# Temporary placeholders
+# Import VoxStream VAD detector
+from voxstream.voice.vad import VADetector as FastVADDetector
+
+# Temporary placeholder for DirectAudioCapture
 class DirectAudioCapture:
     def __init__(self, *args, **kwargs):
         pass
@@ -33,16 +33,7 @@ class DirectAudioCapture:
     def get_metrics(self):
         return {}
     async def start_async_capture(self):
-        # Return an empty queue for the placeholder
         return asyncio.Queue()
-
-class FastVADDetector:
-    def __init__(self, *args, **kwargs):
-        pass
-    def process_chunk(self, *args):
-        return None
-    def get_metrics(self):
-        return {}
 
 # Import VoiceState from voxstream
 from voxstream.voice.vad import VoiceState as VADState
@@ -80,6 +71,7 @@ Minimal features - Just voice I/O
         self.audio_capture: Optional[DirectAudioCapture] = None
         self.vad_detector: Optional[FastVADDetector] = None
         self.stream_manager: Optional[FastStreamManager] = None
+        self._audio_engine = None  # For unified audio interface
 
         self._audio_queue: Optional[asyncio.Queue] = None  # ADD THIS
         self._audio_task: Optional[asyncio.Task] = None    # ADD THIS

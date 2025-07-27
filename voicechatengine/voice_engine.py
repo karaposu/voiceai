@@ -169,7 +169,9 @@ class VoiceEngine:
         self._base = BaseEngine(logger=self.logger)
         
         # Create strategy through base engine
-        self._base.create_strategy(self.mode)
+        # Use provider-based fast lane if metadata indicates it
+        use_provider_fast_lane = self.config.metadata.get("use_provider_fast_lane", False)
+        self._base.create_strategy(self.mode, use_provider_fast_lane=use_provider_fast_lane)
         
         # Direct reference to strategy for hot path
         self._strategy = self._base.strategy
@@ -226,7 +228,8 @@ class VoiceEngine:
                 
                 # Recreate strategy if needed (for reconnection)
                 if not self._base.strategy or not hasattr(self._base.strategy, '_is_initialized'):
-                    self._base.create_strategy(self.mode)
+                    use_provider_fast_lane = self.config.metadata.get("use_provider_fast_lane", False)
+                    self._base.create_strategy(self.mode, use_provider_fast_lane=use_provider_fast_lane)
                     self._strategy = self._base.strategy
                 
                 # Initialize strategy

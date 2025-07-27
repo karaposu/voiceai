@@ -102,17 +102,8 @@ class ProviderStrategy(BaseStrategy):
                 self.logger.error(f"Error creating session: {e}")
                 raise
             
-            # Initialize audio engine - ensure we're using voxstream's StreamConfig
-            audio_config = AudioConfig(
-                sample_rate=stream_config.audio_format.sample_rate,
-                channels=stream_config.audio_format.channels,
-                chunk_duration_ms=self.config.metadata.get("chunk_duration_ms", 100)
-            )
-            
-            # Create VoxStream with mode parameter if needed
-            self._audio_engine = VoxStream(config=audio_config, mode=ProcessingMode.REALTIME)
-            
-            # Configure VAD if enabled
+            # Initialize audio engine using unified interface
+            vad_config = None
             if self.config.enable_vad:
                 vad_config = VADConfig(
                     type=VADType.ENERGY_BASED,
@@ -120,9 +111,27 @@ class ProviderStrategy(BaseStrategy):
                     speech_start_ms=self.config.metadata.get("vad_speech_start_ms", 100),
                     speech_end_ms=self.config.metadata.get("vad_speech_end_ms", 500)
                 )
-                # Set VAD config if the engine supports it
-                if hasattr(self._audio_engine, 'set_vad_config'):
-                    self._audio_engine.set_vad_config(vad_config)
+            
+            # Create audio config for VoxStream
+            audio_config = AudioConfig(
+                sample_rate=stream_config.audio_format.sample_rate,
+                channels=stream_config.audio_format.channels,
+                chunk_duration_ms=self.config.metadata.get("chunk_duration_ms", 100)
+            )
+            
+            self._audio_engine = VoxStream(
+                config=audio_config,
+                mode=ProcessingMode.REALTIME
+            )
+            
+            # Configure devices and VAD
+            self._audio_engine.configure_devices(
+                input_device=self.config.input_device,
+                output_device=self.config.output_device
+            )
+            
+            if vad_config:
+                self._audio_engine.configure_vad(vad_config)
             
             # Start event processing
             self._event_task = asyncio.create_task(self._process_provider_events())
@@ -164,6 +173,9 @@ class ProviderStrategy(BaseStrategy):
         """Send text to the provider."""
         if self._session and self._session.is_active:
             await self._session.send_text(text)
+            # For OpenAI, we need to explicitly request a response
+            if hasattr(self._session, 'create_response'):
+                await self._session.create_response()
             
     async def interrupt(self) -> None:
         """Interrupt the current response."""
@@ -182,9 +194,7 @@ class ProviderStrategy(BaseStrategy):
         
         # Stop audio
         if self._audio_engine:
-            # VoxStream uses stop_capture_stream instead of stop_stream
-            if hasattr(self._audio_engine, 'stop_capture_stream'):
-                await self._audio_engine.stop_capture_stream()
+            await self._audio_engine.stop_capture_stream()
             
         # Cancel event processing
         if self._event_task:
@@ -205,11 +215,7 @@ class ProviderStrategy(BaseStrategy):
             
         # Clean up audio
         if self._audio_engine:
-            # VoxStream has cleanup_async method
-            if hasattr(self._audio_engine, 'cleanup_async'):
-                await self._audio_engine.cleanup_async()
-            elif hasattr(self._audio_engine, 'cleanup'):
-                self._audio_engine.cleanup()
+            await self._audio_engine.cleanup_async()
             
         self._state = StreamState.ENDED
         self.logger.info("Provider strategy cleaned up")
@@ -235,13 +241,9 @@ class ProviderStrategy(BaseStrategy):
             }
             
         if self._audio_engine:
-            audio_metrics = self._audio_engine.get_stream_info()
+            audio_metrics = self._audio_engine.get_metrics()
             if audio_metrics:
-                metrics["audio"] = {
-                    "input_latency": audio_metrics.input_latency,
-                    "output_latency": audio_metrics.output_latency,
-                    "cpu_usage": audio_metrics.cpu_load
-                }
+                metrics["audio"] = audio_metrics
                 
         return metrics
         
@@ -265,11 +267,15 @@ class ProviderStrategy(BaseStrategy):
         try:
             async for event in self.get_events():
                 # Handle audio playback
-                if event.type == StreamEventType.AUDIO_RECEIVED:
-                    audio_hex = event.data.get("audio", "")
-                    if audio_hex and self._audio_engine:
-                        audio_bytes = bytes.fromhex(audio_hex)
-                        await self._audio_engine.write_output_audio(audio_bytes)
+                if event.type == StreamEventType.AUDIO_OUTPUT_CHUNK:
+                    audio_data = event.data.get("audio")
+                    if audio_data and self._audio_engine:
+                        # Convert from hex if needed
+                        if isinstance(audio_data, str):
+                            audio_bytes = bytes.fromhex(audio_data)
+                        else:
+                            audio_bytes = audio_data
+                        self._audio_engine.queue_audio(audio_bytes)
                         
                 # Emit event to engine
                 await self._emit_event(event)
@@ -281,10 +287,21 @@ class ProviderStrategy(BaseStrategy):
             
     async def _forward_audio_to_provider(self):
         """Forward captured audio to the provider."""
+        if not self._audio_engine:
+            return
+            
         try:
-            async for audio_chunk in self._audio_engine.read_input_audio_stream():
-                if audio_chunk and audio_chunk.data:
-                    await self.send_audio(audio_chunk.data)
+            # Start audio capture
+            audio_queue = await self._audio_engine.start_capture_stream()
+            
+            # Forward audio chunks
+            while True:
+                try:
+                    audio_chunk = await asyncio.wait_for(audio_queue.get(), timeout=0.1)
+                    if audio_chunk:
+                        await self.send_audio(audio_chunk)
+                except asyncio.TimeoutError:
+                    continue
                     
         except asyncio.CancelledError:
             pass
