@@ -1,4 +1,4 @@
-# Provider implementations for VoiceEngine V2
+# Provider implementations for VoiceEngine
 
 from .base import (
     BaseProvider,
@@ -15,6 +15,8 @@ from .base import (
 
 from .openai_provider import OpenAIProvider, OpenAIConfig
 from .mock_provider import MockProvider, MockConfig
+from .provider_adapter import ProviderAdapter, ProviderSessionAdapter
+from .registry import get_registry, register_default_providers
 
 __all__ = [
     # Base classes
@@ -35,5 +37,13 @@ __all__ = [
     'OpenAIProvider',
     'OpenAIConfig',
     'MockProvider',
-    'MockConfig'
+    'MockConfig',
+    
+    # Adapter
+    'ProviderAdapter',
+    'ProviderSessionAdapter',
+    
+    # Registry
+    'get_registry',
+    'register_default_providers'
 ]

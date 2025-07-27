@@ -4,6 +4,8 @@ Provider Interface Smoke Tests
 
 This script tests the basic functionality of the provider abstraction
 without using any testing frameworks. Run directly with Python.
+
+python -m voicechatengine.smoke_tests.test_provider_interface
 """
 
 import asyncio
@@ -13,11 +15,11 @@ import time
 from typing import List, Tuple
 
 # Add project root to path
-project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
 
-from voicechatengine.v2.providers.mock_provider import MockProvider, MockConfig
-from voicechatengine.v2.providers.base import MessageType, ConnectionState, ProviderEvent
+from voicechatengine.providers.mock_provider import MockProvider, MockConfig
+from voicechatengine.providers.base import MessageType, ConnectionState, ProviderEvent
 
 
 def print_test(test_name: str, passed: bool, error: str = None):

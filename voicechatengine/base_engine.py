@@ -257,7 +257,7 @@ class BaseEngine:
         Create appropriate strategy implementation.
         
         Args:
-            mode: Either "fast" or "big"
+            mode: Either "fast", "big", or "provider"
             
         Returns:
             Strategy instance
@@ -276,8 +276,13 @@ class BaseEngine:
                 "Big lane strategy not yet implemented. Please use mode='fast' for now."
             )
             # self.components.strategy = BigLaneStrategy(logger=self.logger)
+        elif mode == "provider":
+            # Use new provider-based strategy
+            from .strategies.provider_strategy import ProviderStrategy
+            self.logger.info("Creating ProviderStrategy for provider mode")
+            self.components.strategy = ProviderStrategy(logger=self.logger)
         else:
-            raise ValueError(f"Invalid mode: {mode}. Must be 'fast' or 'big'")
+            raise ValueError(f"Invalid mode: {mode}. Must be 'fast', 'big', or 'provider'")
         
         return self.components.strategy
     

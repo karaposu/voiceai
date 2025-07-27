@@ -35,7 +35,7 @@ class VoiceEngineConfig:
     provider: str = "openai"
     
     # Mode selection
-    mode: Literal["fast", "big"] = "fast"
+    mode: Literal["fast", "big", "provider"] = "fast"
     
     # Audio settings
     input_device: Optional[int] = None
@@ -132,7 +132,7 @@ class VoiceEngine:
         self,
         api_key: Optional[str] = None,
         config: Optional[VoiceEngineConfig] = None,
-        mode: Literal["fast", "big"] = "fast",
+        mode: Literal["fast", "big", "provider"] = "fast",
         **kwargs
     ):
         """

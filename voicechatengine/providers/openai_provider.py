@@ -1,3 +1,5 @@
+# here is voicechatengine/providers/openai_provider.py
+
 """
 OpenAI Realtime API Provider Implementation
 
@@ -61,7 +63,7 @@ class OpenAIProvider(BaseProvider):
             # Connect
             self.ws = await websockets.connect(
                 url,
-                extra_headers=headers,
+                additional_headers=headers,
                 ping_interval=20,
                 ping_timeout=10
             )
