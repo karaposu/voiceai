@@ -16,7 +16,7 @@ from pathlib import Path
 import json
 
 from .core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from .audioengine.audioengine.audio_types import AudioBytes
+AudioBytes = bytes  # Simple type alias for audio data
 from .core.provider_protocol import Usage, Cost
 from .core.exceptions import EngineError
 from .strategies.base_strategy import EngineConfig
@@ -370,13 +370,12 @@ class VoiceEngine:
             audio_chunks.append(audio)
             
             # Play immediately for real-time experience
-            if self._base._audio_manager and self._base._audio_manager._player:
+            if self._base.components.audio_engine:
                 if not first_chunk_played:
                     # Tiny delay only for first chunk to ensure stream is ready
-                    
                     time.sleep(0.005)  # 5ms - imperceptible
                     first_chunk_played = True
-                self._base._audio_manager._player.play_audio(audio)
+                self._base.components.audio_engine.play_audio(audio)
         
         def on_done():
             if not audio_future.done():

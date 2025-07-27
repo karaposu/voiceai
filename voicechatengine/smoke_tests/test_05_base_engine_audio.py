@@ -15,7 +15,8 @@ import numpy as np
 from ..base_engine import BaseEngine
 from ..strategies.base_strategy import EngineConfig
 from ..core.stream_protocol import StreamEvent, StreamEventType
-from ..audioengine.audioengine.audio_types import AudioBytes
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

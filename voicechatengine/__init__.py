@@ -9,15 +9,21 @@ __version__ = "0.2.0"
 
 # Core imports for smoke tests
 from voicechatengine.voice_engine import VoiceEngine, VoiceEngineConfig
-from voicechatengine.audioengine.audioengine.audio_processor import AudioProcessor
-from voicechatengine.audioengine.audioengine.audio_engine import (
-    AudioEngine,
-    ProcessingMetrics,
-    ProcessingStrategy,
+from voxstream.core.processor import StreamProcessor as AudioProcessor
+from voxstream import VoxStream as AudioEngine
+from voxstream.core.stream import (
     create_fast_lane_engine,
     create_big_lane_engine,
     create_adaptive_engine,
 )
+from voxstream.config.types import StreamMetrics as ProcessingMetrics
+# ProcessingStrategy is not available in voxstream, define it locally if needed
+from enum import Enum
+class ProcessingStrategy(Enum):
+    ZERO_COPY = "zero_copy"
+    FAST_LANE = "fast_lane"
+    BALANCED = "balanced"
+    QUALITY = "quality"
 from voicechatengine.session import SessionConfig, SessionPresets
 from voicechatengine.config import Identity, IDENTITIES
 from voicechatengine.core.exceptions import (
@@ -40,15 +46,16 @@ from voicechatengine.core.message_protocol import (
 )
 
 # Audio types (used by smoke tests)
-from voicechatengine.audioengine.audioengine.audio_types import (
+from voxstream.config.types import (
     AudioFormat,
-    AudioConfig,
+    StreamConfig as AudioConfig,
     ProcessingMode,
     BufferConfig,
     AudioConstants,
     VADConfig,
     VADType,
 )
+from voxstream.voice.vad import VoiceState
 
 # Stream protocol (used by smoke tests)
 from voicechatengine.core.stream_protocol import (
@@ -59,7 +66,7 @@ from voicechatengine.core.stream_protocol import (
 
 
 
-from voicechatengine.audioengine.audioengine.audio_manager import (
+from voxstream.io.manager import (
     AudioManager,
     AudioManagerConfig,
     # AudioComponentState,

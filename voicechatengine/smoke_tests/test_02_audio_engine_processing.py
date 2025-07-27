@@ -1,5 +1,5 @@
 """
-Test 02: AudioEngine Processing
+Test 02: VoxStream Processing
 Tests audio processing capabilities including format conversion, validation, and enhancement.
 
 
@@ -12,12 +12,14 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import time
 import numpy as np
-from ..audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from ..audioengine.audioengine.audio_types import (
-    AudioConfig, ProcessingMode, AudioBytes, AudioFormat,
+from voxstream import VoxStream
+from voxstream.core.stream import create_fast_lane_engine
+from voxstream.config.types import (
+    StreamConfig, ProcessingMode, AudioFormat,
     VADConfig, VADType
 )
-from ..audioengine.audioengine.audio_processor import AudioProcessor
+AudioBytes = bytes
+from voxstream.core.processor import StreamProcessor
 
 def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000, channels: int = 1) -> AudioBytes:
     """Generate test audio with configurable parameters"""
@@ -44,7 +46,7 @@ def test_format_validation():
     print("\n=== Test 1: Format Validation ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         processor = engine.processor
         
         # Test valid audio
@@ -76,7 +78,7 @@ def test_audio_chunking():
     print("\n=== Test 2: Audio Chunking ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Generate 1 second of audio
         test_audio = generate_test_audio(1000)
@@ -102,7 +104,7 @@ def test_stereo_to_mono():
     print("\n=== Test 3: Stereo to Mono Conversion ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Generate stereo audio
         stereo_audio = generate_test_audio(100, channels=2)
@@ -130,7 +132,7 @@ def test_processing_modes():
         results = {}
         
         for mode in [ProcessingMode.REALTIME, ProcessingMode.BALANCED, ProcessingMode.QUALITY]:
-            engine = AudioEngine(mode=mode)
+            engine = VoxStream(mode=mode)
             
             # Time the processing
             start = time.time()
@@ -190,7 +192,7 @@ def test_buffer_management():
         print("⚠ Skipping buffer management test due to stream buffer issues")
         return True
         # Test with stream buffer
-        engine = AudioEngine(mode=ProcessingMode.QUALITY)
+        engine = VoxStream(mode=ProcessingMode.QUALITY)
         
         # Simulate streaming scenario
         chunk_size_ms = 20
@@ -223,7 +225,7 @@ def test_performance_metrics():
     print("\n=== Test 7: Performance Metrics ===")
     
     try:
-        engine = AudioEngine(mode=ProcessingMode.BALANCED)
+        engine = VoxStream(mode=ProcessingMode.BALANCED)
         
         # Process various sized chunks
         chunk_sizes = [10, 20, 50, 100, 200]
@@ -251,11 +253,11 @@ def test_edge_cases():
     print("\n=== Test 8: Edge Cases ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Test with numpy disabled
-        config_no_numpy = AudioConfig(use_numpy=False)
-        engine_no_numpy = AudioEngine(config=config_no_numpy, mode=ProcessingMode.REALTIME)
+        config_no_numpy = StreamConfig(use_numpy=False)
+        engine_no_numpy = VoxStream(config=config_no_numpy, mode=ProcessingMode.REALTIME)
         
         test_audio = generate_test_audio(50)
         processed = engine_no_numpy.process_audio(test_audio)
@@ -280,7 +282,7 @@ def test_edge_cases():
 def main():
     """Run all tests"""
     print("=" * 60)
-    print("AudioEngine Processing Tests")
+    print("VoxStream Processing Tests")
     print("=" * 60)
     
     results = []

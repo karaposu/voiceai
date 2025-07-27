@@ -13,7 +13,8 @@ import asyncio
 import time
 import numpy as np
 from ..voice_engine import VoiceEngine
-from ..audioengine.audioengine.audio_types import AudioBytes
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
 
 # Load environment variables from .env file
 from dotenv import load_dotenv

@@ -18,8 +18,10 @@ from enum import Enum
 
 import numpy as np
 
-from voicechatengine.audioengine.audioengine.audio_types import AudioBytes, AudioConfig, AudioMetadata
-from voicechatengine.audioengine.audioengine.audio_processor import AudioProcessor as BaseAudioProcessor
+from voxstream.config.types import StreamConfig as AudioConfig
+from voxstream.core.processor import StreamProcessor as BaseAudioProcessor
+AudioBytes = bytes  # Simple type alias for audio data
+AudioMetadata = Dict[str, Any]  # Simple type alias for metadata
 from voicechatengine.core.exceptions import AudioError
 
 

@@ -14,7 +14,7 @@ import asyncio
 import time
 import gc
 from voicechatengine.voice_engine import VoiceEngine, VoiceEngineConfig
-from voicechatengine.audioengine.audioengine.audio_engine import AudioEngine
+from voxstream import VoxStream as AudioEngine
 from voicechatengine.base_engine import BaseEngine
 
 # Try to import psutil, but make it optional
@@ -199,20 +199,20 @@ async def test_component_cleanup():
         # Create components separately
         components_tested = []
         
-        # Test AudioEngine cleanup
-        from audioengine.audioengine.audio_types import AudioConfig
+        # Test VoxStream cleanup
+        from voxstream.config.types import StreamConfig as AudioConfig
         audio_config = AudioConfig(sample_rate=24000, channels=1)
-        audio_engine = AudioEngine(config=audio_config)
+        vox_stream = AudioEngine(config=audio_config)
         
         # Use it - process some audio
-        audio_engine.process_audio(b'\x00' * 4800)
+        vox_stream.process_audio(b'\x00' * 4800)
         
         # Get metrics before cleanup
-        metrics_before = audio_engine.get_metrics()
+        metrics_before = vox_stream.get_metrics()
         
         # Cleanup
-        audio_engine.cleanup()
-        components_tested.append("AudioEngine")
+        vox_stream.cleanup()
+        components_tested.append("VoxStream")
         print("✓ AudioEngine cleaned up")
         
         # Test BaseEngine cleanup

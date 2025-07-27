@@ -102,7 +102,7 @@ async def test_strategy_initialization():
         return False
 
 async def test_audio_setup():
-    """Test audio setup through AudioEngine"""
+    """Test audio setup through VoxStream"""
     print("\n=== Test 4: Audio Setup ===")
     
     try:

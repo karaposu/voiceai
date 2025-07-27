@@ -14,7 +14,7 @@ from enum import Enum
 from datetime import datetime
 
 from .stream_protocol import StreamCapabilities, StreamEvent, StreamConfig
-from ..audioengine.audioengine.audio_types import AudioFormat
+from voxstream.config.types import AudioFormat
 
 
 # ============== Provider Capabilities ==============

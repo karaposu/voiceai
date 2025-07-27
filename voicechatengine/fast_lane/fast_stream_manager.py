@@ -20,7 +20,9 @@ from voicechatengine.core.stream_protocol import (
 )
 from voicechatengine.connections.websocket_connection import FastLaneConnection
 from voicechatengine.core.message_protocol import MessageFactory, ServerMessageType
-from voicechatengine.audioengine.audioengine.audio_types import AudioBytes, AudioConfig
+from voxstream.config.types import StreamConfig as AudioConfig
+from voxstream.voice.vad import VoiceState as VADState
+AudioBytes = bytes  # Simple type alias for audio data
 from voicechatengine.core.exceptions import StreamError
 
 

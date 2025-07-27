@@ -11,7 +11,8 @@ from typing import Optional, Dict, Any, List, AsyncIterator, Callable
 from dataclasses import dataclass
 
 from ..core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from ..audioengine.audioengine.audio_types import AudioBytes
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
 from ..core.provider_protocol import Usage, Cost
 
 

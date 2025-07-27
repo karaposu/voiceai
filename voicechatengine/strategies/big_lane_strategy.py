@@ -19,6 +19,7 @@ Dynamic allocation - Flexibility over performance
 """
 
 import asyncio
+import time
 from typing import Optional, Dict, Any, List, AsyncIterator, Callable
 import logging
 from collections import defaultdict
@@ -28,7 +29,9 @@ from ..core.stream_protocol import (
     StreamEvent, StreamEventType, StreamState,
     IStreamManager, StreamConfig, AudioFormat
 )
-from audioengine.audioengine.audio_types import AudioBytes, AudioConfig
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
+from voxstream.config.types import StreamConfig as AudioConfig
 from ..core.provider_protocol import (
     Usage, Cost, IVoiceProvider, ProviderRegistry,
     ProviderConfig, IProviderSession
@@ -43,6 +46,23 @@ from ..big_lane.audio_pipeline import AudioPipeline, AudioProcessor
 from ..big_lane.event_bus import EventBus, Event
 from ..big_lane.stream_orchestrator import StreamOrchestrator
 from ..big_lane.response_aggregator import ResponseAggregator
+
+# Placeholder audio processors - would be implemented separately
+class AudioValidator:
+    pass
+
+class NoiseReducer:
+    pass
+
+class VolumeNormalizer:
+    pass
+
+class EchoCanceller:
+    pass
+
+class VADProcessor:
+    def __init__(self, threshold: float = 0.5):
+        self.threshold = threshold
 
 
 class BigLaneStrategy(BaseStrategy):

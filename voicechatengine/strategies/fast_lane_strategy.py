@@ -14,7 +14,9 @@ import logging
 
 from .base_strategy import BaseStrategy, EngineConfig
 from ..core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from ..audioengine.audioengine.audio_types import AudioBytes, AudioConfig, VADConfig, VADType
+from voxstream.config.types import StreamConfig as AudioConfig, VADConfig, ProcessingMode, VADType
+from voxstream.voice.vad import VoiceState
+AudioBytes = bytes  # Simple type alias for audio data
 from ..core.provider_protocol import Usage, Cost
 # TODO: These modules need to be created or replaced with AudioEngine equivalents
 # from ..fast_lane.direct_audio_capture import DirectAudioCapture
@@ -42,10 +44,8 @@ class FastVADDetector:
     def get_metrics(self):
         return {}
 
-class VADState:
-    SPEECH_STARTING = "speech_starting"
-    SPEECH = "speech"
-    SILENCE = "silence"
+# Import VoiceState from voxstream
+from voxstream.voice.vad import VoiceState as VADState
 from ..fast_lane.fast_stream_manager import FastStreamManager, FastStreamConfig
 from ..core.exceptions import EngineError
 

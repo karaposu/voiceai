@@ -32,11 +32,14 @@ except ImportError:
     HAS_PYDUB = False
     AudioSegment = None
 
-from audioengine.audioengine.audio_types import (
-    AudioBytes, AudioFormat, AudioConfig, AudioConstants,
-    AudioMetadata, ProcessingMode
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
+from voxstream.config.types import (
+    AudioFormat, StreamConfig as AudioConfig, 
+    AudioConstants, AudioMetadata, ProcessingMode
 )
-from audioengine.audioengine.audio_processor import AudioProcessor
+# Import AudioProcessor from voxstream
+from voxstream.core.processor import AudioProcessor
 from ..core.exceptions import AudioError, AudioErrorType
 
 
@@ -59,7 +62,8 @@ class AudioFileIO:
     ):
         self.config = config or AudioConfig()
         self.logger = logger or logging.getLogger(__name__)
-        self.processor = AudioProcessor(config, ProcessingMode.BALANCED)
+        # Initialize with voxstream processor
+        self.processor = AudioProcessor(config)
         
     # ============== WAV File Operations ==============
     

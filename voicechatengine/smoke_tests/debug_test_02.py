@@ -9,17 +9,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 print("Starting debug test 02...")
 
 # Try importing
-print("Importing AudioEngine...")
-from audioengine.audioengine.audio_engine import AudioEngine
-print("✓ AudioEngine imported")
+print("Importing VoxStream...")
+from voxstream import VoxStream
+print("✓ VoxStream imported")
 
-print("Importing AudioProcessor...")
-from audioengine.audioengine.audio_processor import AudioProcessor
-print("✓ AudioProcessor imported")
+print("Importing StreamProcessor...")
+from voxstream.core.processor import StreamProcessor
+print("✓ StreamProcessor imported")
 
-print("Creating AudioEngine instance...")
-engine = AudioEngine()
-print("✓ AudioEngine created")
+print("Creating VoxStream instance...")
+engine = VoxStream()
+print("✓ VoxStream created")
 
 print("Accessing processor...")
 processor = engine.processor

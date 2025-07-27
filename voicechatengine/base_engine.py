@@ -14,17 +14,16 @@ from dataclasses import dataclass, field
 
 
 from .core.stream_protocol import StreamEvent, StreamEventType, StreamState
-from .audioengine.audioengine.audio_types import AudioBytes
+AudioBytes = bytes  # Simple type alias for audio data
 from .core.exceptions import EngineError
 from .strategies.base_strategy import BaseStrategy, EngineConfig
 from .strategies.fast_lane_strategy import FastLaneStrategy
 
-# Import AudioEngine from the audioengine package
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-from .audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from .audioengine.audioengine.audio_types import AudioConfig, VADConfig, VADType, ProcessingMode
+# Import VoxStream components
+from voxstream import VoxStream as AudioEngine
+from voxstream.core.stream import create_fast_lane_engine
+from voxstream.config.types import StreamConfig as AudioConfig, VADConfig, ProcessingMode, VADType
+from voxstream.voice.vad import VoiceState
 
 
 @dataclass

@@ -15,9 +15,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 from .stream_protocol import StreamEvent, StreamEventType, StreamState
-from audioengine.audioengine.audio_types import AudioBytes, AudioConfig
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
+from voxstream.config.types import StreamConfig as AudioConfig
 from .exceptions import AudioError
-from audioengine.audioengine.audio_manager import AudioManager
+# AudioManager needs to be replaced with voxstream components
+# TODO: Replace with voxstream audio manager when available
+AudioManager = None  # Placeholder
 from ..strategies.base_strategy import BaseStrategy
 
 

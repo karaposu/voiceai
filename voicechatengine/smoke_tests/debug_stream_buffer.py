@@ -10,8 +10,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import asyncio
 import time
 import numpy as np
-from voicechatengine.audioengine.audioengine.audio_processor import AudioStreamBuffer
-from voicechatengine.audioengine.audioengine.audio_types import AudioBytes, AudioConfig, BufferConfig
+from voxstream.core.buffer import StreamBuffer as AudioStreamBuffer
+from voxstream.config.types import StreamConfig as AudioConfig, BufferConfig
+AudioBytes = bytes  # Simple type alias for audio data
 
 def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000) -> AudioBytes:
     """Generate test audio (sine wave)"""

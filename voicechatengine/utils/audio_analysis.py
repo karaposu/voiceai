@@ -9,6 +9,8 @@ Provides both real-time and detailed analysis capabilities.
 
 import logging
 import time
+import struct
+import math
 from typing import Dict, Any, Optional, List, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -30,9 +32,12 @@ except ImportError:
     HAS_SCIPY = False
     scipy = None
 
-from audioengine.audioengine.audio_types import (
-    AudioBytes, AudioConfig, AudioConstants, AudioMetadata,
-    AmplitudeFloat, ProcessingMode
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
+AmplitudeFloat = float
+from voxstream.config.types import (
+    StreamConfig as AudioConfig, AudioConstants, 
+    AudioMetadata, ProcessingMode
 )
 from ..core.exceptions import AudioError
 

@@ -1,6 +1,6 @@
 """
-Test 03: AudioEngine Streaming
-Tests audio capture and playback functionality through AudioEngine.
+Test 03: VoxStream Streaming
+Tests audio capture and playback functionality through VoxStream.
 
 python -m voicechatengine.smoke_tests.test_03_audio_engine_streaming
 """
@@ -12,10 +12,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 import asyncio
 import time
 import numpy as np
-from ..audioengine.audioengine.audio_engine import AudioEngine, create_fast_lane_engine
-from ..audioengine.audioengine.audio_types import (
-    AudioConfig, ProcessingMode, AudioBytes, VADConfig, VADType
+from voxstream import VoxStream
+from voxstream.core.stream import create_fast_lane_engine
+from voxstream.config.types import (
+    StreamConfig, ProcessingMode, VADConfig, VADType
 )
+AudioBytes = bytes
 
 def generate_test_audio(duration_ms: int = 100, sample_rate: int = 24000) -> AudioBytes:
     """Generate test audio (sine wave)"""
@@ -61,7 +63,7 @@ async def test_playback_queue():
     print("\n=== Test 2: Playback Queue ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Queue multiple audio chunks
         chunks_queued = 0
@@ -149,7 +151,7 @@ async def test_playback_callbacks():
     print("\n=== Test 5: Playback Callbacks ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Track callbacks
         completion_called = False
@@ -186,7 +188,7 @@ async def test_streaming_metrics():
     print("\n=== Test 6: Streaming Metrics ===")
     
     try:
-        engine = AudioEngine()
+        engine = VoxStream()
         
         # Simulate streaming scenario
         for i in range(10):
@@ -275,7 +277,7 @@ async def test_concurrent_operations():
 async def main():
     """Run all tests"""
     print("=" * 60)
-    print("AudioEngine Streaming Tests")
+    print("VoxStream Streaming Tests")
     print("=" * 60)
     
     results = []

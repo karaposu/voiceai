@@ -16,7 +16,8 @@ from enum import Enum
 from collections import defaultdict
 
 from ..core.stream_protocol import StreamEvent, StreamEventType, Response
-from audioengine.audioengine.audio_types import AudioBytes
+# AudioBytes is now just an alias for bytes
+AudioBytes = bytes
 from ..core.exceptions import StreamError
 
 
