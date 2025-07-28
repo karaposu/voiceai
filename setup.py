@@ -4,7 +4,7 @@ import subprocess
 import os
 
 setup(
-    name='voicechatengine',  # Package name
+    name='voxengine',  # Package name
     version='0.0.3',  # Version of your package
     author='enes kuzucu',  # Your name
     

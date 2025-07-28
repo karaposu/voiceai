@@ -1,6 +1,6 @@
 # Parley 🎙️
 
-A production-ready framework for building intelligent AI voice chat backends with dynamic context injection, built on top of VoiceChatEngine.
+A production-ready framework for building intelligent AI voice chat backends with dynamic context injection, built on top of VoxEngine.
 
 ## 🎯 Overview
 
@@ -50,7 +50,7 @@ Parley solves these by providing:
 
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   Your App      │────▶│     Parley       │────▶│ VoiceChatEngine │
+│   Your App      │────▶│     Parley       │────▶│ VoxEngine │
 └─────────────────┘     └──────────────────┘     └─────────────────┘
                                │
                     ┌──────────┴──────────┐
@@ -342,4 +342,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-Built with ❤️ on top of [VoiceChatEngine](https://github.com/yourusername/voicechatengine)
+Built with ❤️ on top of [VoxEngine](https://github.com/yourusername/voicechatengine)

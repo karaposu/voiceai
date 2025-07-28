@@ -393,7 +393,7 @@ This refactor prepares VoiceEngine for:
 Run the complete smoke test suite:
 ```bash
 # Run all V2 smoke tests
-python -m voicechatengine.smoke_tests.v2.run_all_tests
+python -m voxengine.smoke_tests.v2.run_all_tests
 
 # Expected output:
 # ✓ Provider Abstraction: PASS

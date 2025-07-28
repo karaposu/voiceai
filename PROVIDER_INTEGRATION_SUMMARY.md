@@ -7,7 +7,7 @@ Successfully integrated the v2 provider abstraction into the main VoiceEngine co
 ## What Was Done
 
 ### 1. Moved Provider Classes
-- Moved all provider classes from `v2/providers/` to `voicechatengine/providers/`
+- Moved all provider classes from `v2/providers/` to `voxengine/providers/`
 - Files moved:
   - `base.py` - Abstract BaseProvider interface
   - `openai_provider.py` - OpenAI Realtime API implementation
@@ -16,7 +16,7 @@ Successfully integrated the v2 provider abstraction into the main VoiceEngine co
   - `registry.py` - Provider registry for registration and discovery
 
 ### 2. Created Provider Strategy
-- Added `provider_strategy.py` to `voicechatengine/strategies/`
+- Added `provider_strategy.py` to `voxengine/strategies/`
 - Implements BaseStrategy using the new provider abstraction
 - Demonstrates how to use providers instead of direct WebSocket connections
 
@@ -41,7 +41,7 @@ Successfully integrated the v2 provider abstraction into the main VoiceEngine co
 ### Using Provider Mode
 
 ```python
-from voicechatengine import VoiceEngine, VoiceEngineConfig
+from voxengine import VoiceEngine, VoiceEngineConfig
 
 # Use the new provider abstraction
 config = VoiceEngineConfig(
@@ -59,7 +59,7 @@ await engine.send_text("Hello!")
 ### Direct Provider Usage
 
 ```python
-from voicechatengine.providers import MockProvider, MockConfig
+from voxengine.providers import MockProvider, MockConfig
 
 config = MockConfig(api_key="test-key")
 provider = MockProvider(config)

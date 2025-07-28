@@ -1,10 +1,15 @@
-# VoiceChatEngine 
+# VoxEngine 
+
+ VoxEngine is a multi-paradigm voice AI framework that adapts to your application's needs, not the other way
+  around. It's not just an abstraction layer—it's a comprehensive toolkit that supports every voice application
+  design pattern and use case imaginable.
+
 
 A high-performance Python framework for OpenAI's Realtime API, featuring a unique dual-lane architecture that balances ultra-low latency with rich functionality.
 
 ## 🎯 Overview
 
-VoiceChatEngine provides a modern, production-ready interface for building real-time voice applications with OpenAI's Realtime API. The framework's innovative dual-lane architecture allows developers to choose between maximum performance (Fast Lane) or full features (Big Lane).
+VoxEngine provides a modern, production-ready interface for building real-time voice applications with OpenAI's Realtime API. The framework's innovative dual-lane architecture allows developers to choose between maximum performance (Fast Lane) or full features (Big Lane).
 
 ### Key Features
 
@@ -39,18 +44,18 @@ Full-featured implementation with:
 ### Installation
 
 ```bash
-pip install realtimevoiceapi
+pip install voxengine
 ```
 
 ### Basic Usage
 
 ```python
 import asyncio
-from voicechatengine import VoiceChatEngine
+from voxengine import VoxEngine
 
 async def main():
     # Create engine
-    engine = VoiceChatEngine(api_key="your-openai-api-key")
+    engine = VoxEngine(api_key="your-openai-api-key")
     
     # Set up callbacks
     engine.on_text_response = lambda text: print(f"AI: {text}")
@@ -69,7 +74,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from voicechatengine import VoiceChatEngine, VoiceEngineConfig
+from voxengine import VoxEngine, VoiceEngineConfig
 
 
 async def main():
@@ -83,7 +88,7 @@ async def main():
         latency_mode="ultra_low"
     )
     
-    engine = VoiceChatEngine(config=config)
+    engine = VoxEngine(config=config)
     
     # Set up comprehensive callbacks
     engine.on_audio_response = lambda audio: print(f"Received {len(audio)} bytes")
@@ -244,7 +249,7 @@ print(f"Total cost: ${cost.total:.2f}")
 python -m pytest tests/smoke_tests/
 
 # Run specific test
-python -m realtimevoiceapi.smoke_tests.test_08_fast_lane_simple_demo
+python -m voxengine.smoke_tests.test_08_voice_engine_audio
 ```
 
 ### Contributing
