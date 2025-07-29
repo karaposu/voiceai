@@ -194,6 +194,14 @@ class VoiceEngine:
         # Event emitter
         self.events = EventEmitter(name=f"VoiceEngine-{self.mode}")
         
+        # State management
+        from .state import StateManager, ConversationState
+        self._state_manager = StateManager(
+            initial_state=ConversationState(),
+            event_emitter=self.events,
+            logger=self.logger
+        )
+        
         # Legacy callbacks (for backward compatibility and convenience)
         self.on_audio_response: Optional[Callable[[AudioBytes], None]] = None
         self.on_text_response: Optional[Callable[[str], None]] = None
@@ -216,6 +224,16 @@ class VoiceEngine:
     def get_state(self) -> StreamState:
         """Get current stream state"""
         return self._base.get_state()
+    
+    @property
+    def conversation_state(self) -> 'ConversationState':
+        """Get current conversation state"""
+        return self._state_manager.state
+    
+    @property
+    def state_manager(self) -> 'StateManager':
+        """Get state manager for advanced state operations"""
+        return self._state_manager
     
     # ============== Connection Methods ==============
 
@@ -330,6 +348,11 @@ class VoiceEngine:
     async def disconnect(self) -> None:
         """Disconnect from voice API"""
         try:
+            # Update state
+            from .state import ConversationStatus
+            self._state_manager.update_connection(is_connected=False)
+            self._state_manager.update(status=ConversationStatus.DISCONNECTED)
+            
             # Emit disconnection event
             await self.events.emit(ConnectionEvent(
                 type=EventType.CONNECTION_CLOSED,
@@ -354,6 +377,9 @@ class VoiceEngine:
         self._ensure_connected()
         await self._base.start_audio_processing()
         
+        # Update state
+        self._state_manager.update_audio(is_listening=True)
+        
         await self.events.emit(Event(
             type=EventType.AUDIO_INPUT_STARTED,
             source=self.name
@@ -362,6 +388,9 @@ class VoiceEngine:
     async def stop_listening(self) -> None:
         """Stop listening for audio input"""
         await self._base.stop_audio_processing()
+        
+        # Update state
+        self._state_manager.update_audio(is_listening=False)
         
         await self.events.emit(Event(
             type=EventType.AUDIO_INPUT_STOPPED,
@@ -411,6 +440,14 @@ class VoiceEngine:
             text: Text message
         """
         self._ensure_connected()
+        
+        # Add message to state
+        from .state import Message, SpeakerRole
+        message = Message(
+            role=SpeakerRole.USER,
+            content=text
+        )
+        self._state_manager.add_message(message)
         
         # Emit text input event
         await self.events.emit(TextEvent(
@@ -697,6 +734,15 @@ class VoiceEngine:
         if event.data:
             text = event.data.get("text")
             if text:
+                # Add assistant message to state (only if not partial)
+                if not event.data.get("is_partial", False):
+                    from .state import Message, SpeakerRole
+                    message = Message(
+                        role=SpeakerRole.ASSISTANT,
+                        content=text
+                    )
+                    self._state_manager.add_message(message)
+                
                 # Emit text event (sync safe)
                 self.events.emit_sync(TextEvent(
                     type=EventType.TEXT_OUTPUT,
