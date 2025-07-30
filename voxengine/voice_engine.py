@@ -195,7 +195,7 @@ class VoiceEngine:
         self.events = EventEmitter(name=f"VoiceEngine-{self.mode}")
         
         # State management
-        from .state import StateManager, ConversationState
+        from voxon.state import StateManager, ConversationState
         self._state_manager = StateManager(
             initial_state=ConversationState(),
             event_emitter=self.events,
@@ -349,7 +349,7 @@ class VoiceEngine:
         """Disconnect from voice API"""
         try:
             # Update state
-            from .state import ConversationStatus
+            from voxon.state import ConversationStatus
             self._state_manager.update_connection(is_connected=False)
             self._state_manager.update(status=ConversationStatus.DISCONNECTED)
             
@@ -442,7 +442,7 @@ class VoiceEngine:
         self._ensure_connected()
         
         # Add message to state
-        from .state import Message, SpeakerRole
+        from voxon.state import Message, SpeakerRole
         message = Message(
             role=SpeakerRole.USER,
             content=text
@@ -736,7 +736,7 @@ class VoiceEngine:
             if text:
                 # Add assistant message to state (only if not partial)
                 if not event.data.get("is_partial", False):
-                    from .state import Message, SpeakerRole
+                    from voxon.state import Message, SpeakerRole
                     message = Message(
                         role=SpeakerRole.ASSISTANT,
                         content=text

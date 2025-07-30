@@ -3,6 +3,8 @@ State Manager
 
 Thread-safe state management with atomic updates and event integration.
 Provides a clean API for state transitions while maintaining consistency.
+
+NOTE: Moved from voxengine to voxon for better separation of concerns.
 """
 
 import asyncio
@@ -16,9 +18,12 @@ from contextlib import asynccontextmanager
 
 from .conversation_state import (
     ConversationState, ConversationStatus, Message, Turn,
-    AudioState, ConnectionState, ConversationMetrics, SpeakerRole
+    ConversationMetrics, SpeakerRole
 )
-from ..events import EventEmitter, EventType, Event
+# Import low-level states from voxengine
+from voxengine.state import AudioState, ConnectionState
+# Import EventEmitter from voxengine for now - this is a low-level event system
+from voxengine.events import EventEmitter, EventType, Event
 
 
 T = TypeVar('T')

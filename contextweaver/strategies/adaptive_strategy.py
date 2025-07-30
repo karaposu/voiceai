@@ -51,18 +51,37 @@ class AdaptiveStrategy(InjectionStrategy):
         1. Conversation flow metrics
         2. Previous injection success
         3. User engagement signals
+        4. VAD mode and response settings
         """
+        
+        # Get VAD mode info
+        vad_mode = getattr(state, 'vad_mode', None)
+        auto_response = getattr(state, 'auto_response', True)
+        injection_mode = getattr(state, 'injection_mode', 'adaptive')
         
         # Update conversation metrics
         self._update_metrics(state)
         
+        # Adapt threshold based on VAD mode
+        mode_adjustment = 0.0
+        if vad_mode == 'server' and auto_response:
+            # Need to be more aggressive in server+auto mode
+            mode_adjustment = -0.15
+        elif vad_mode == 'client' and not auto_response:
+            # Can be more conservative with full control
+            mode_adjustment = 0.1
+        
         # Adjust threshold based on conversation flow
+        flow_adjustment = 0.0
         if self.conversation_metrics["interruptions"] > self.conversation_metrics["smooth_turns"]:
             # Too aggressive, increase threshold
-            self.current_threshold = min(0.9, self.current_threshold + self.learning_rate)
+            flow_adjustment = self.learning_rate
         elif self.get_injection_rate(60) < 0.2:
             # Too conservative, decrease threshold
-            self.current_threshold = max(0.5, self.current_threshold - self.learning_rate)
+            flow_adjustment = -self.learning_rate
+        
+        self.current_threshold = max(0.4, min(0.9, 
+            self.base_threshold + mode_adjustment + flow_adjustment))
         
         # Find best detection
         best_detection = None
@@ -90,15 +109,25 @@ class AdaptiveStrategy(InjectionStrategy):
         def adaptive_score(ctx):
             base_score = ctx.priority_value
             
+            # VAD mode adjustments
+            if vad_mode == 'server' and auto_response:
+                # Boost immediate and high priority in server+auto
+                if ctx.timing == InjectionTiming.IMMEDIATE:
+                    base_score += 4
+                if ctx.priority_value >= ContextPriority.HIGH.value:
+                    base_score += 2
+            
             # Boost score if conversation is flowing well
             if self.conversation_metrics["smooth_turns"] > 5:
                 if ctx.timing in [InjectionTiming.NEXT_PAUSE, InjectionTiming.LAZY]:
                     base_score += 2
             
             # Boost immediate contexts if user seems stuck
-            if hasattr(state, 'audio') and state.audio.silence_duration_ms > 3000:
-                if ctx.timing == InjectionTiming.IMMEDIATE:
-                    base_score += 3
+            if hasattr(state, 'audio') and hasattr(state.audio, 'silence_duration_ms'):
+                silence_threshold = 2000 if vad_mode == 'server' else 3000
+                if state.audio.silence_duration_ms > silence_threshold:
+                    if ctx.timing == InjectionTiming.IMMEDIATE:
+                        base_score += 3
             
             # Penalize frequent injection types
             if ctx.timing == InjectionTiming.NEXT_TURN and self.get_injection_rate(30) > 1.0:
@@ -116,10 +145,15 @@ class AdaptiveStrategy(InjectionStrategy):
         
         combined_score = (confidence_factor + priority_factor + flow_factor) / 3
         
-        if combined_score >= 0.6:
-            # Determine timing based on conversation state
-            if best_context.timing == InjectionTiming.IMMEDIATE and flow_factor < 0.5:
-                # Poor flow, delay immediate injections
+        # Adjust threshold based on VAD mode
+        score_threshold = 0.5 if (vad_mode == 'server' and auto_response) else 0.6
+        
+        if combined_score >= score_threshold:
+            # Determine timing based on conversation state and VAD mode
+            if injection_mode == "immediate":
+                timing = "immediate"
+            elif best_context.timing == InjectionTiming.IMMEDIATE and flow_factor < 0.5:
+                # Poor flow, delay immediate injections (unless forced by VAD mode)
                 timing = "next_turn"
             else:
                 timing = "immediate"

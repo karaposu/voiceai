@@ -1,37 +1,19 @@
 """
-VoxEngine State Management
+VoxEngine State
 
-Clean, thread-safe state management for voice conversations.
+Contains low-level engine states (AudioState, ConnectionState) and
+re-exports high-level conversation states from voxon for compatibility.
 """
 
-from .conversation_state import (
-    ConversationState,
-    ConversationStatus,
-    ConversationMetrics,
-    Message,
-    Turn,
-    AudioState,
-    ConnectionState,
-    SpeakerRole
-)
+# Low-level engine states (belong in voxengine)
+from .audio_state import AudioState
+from .connection_state import ConnectionState
 
-from .state_manager import (
-    StateManager,
-    StateUpdate
-)
+# Note: To avoid circular imports, high-level conversation states should be
+# imported directly from voxon.state when needed
 
 __all__ = [
-    # State classes
-    "ConversationState",
-    "ConversationStatus",
-    "ConversationMetrics",
-    "Message",
-    "Turn",
-    "AudioState", 
-    "ConnectionState",
-    "SpeakerRole",
-    
-    # Manager
-    "StateManager",
-    "StateUpdate"
+    # Low-level engine states
+    "AudioState",
+    "ConnectionState"
 ]

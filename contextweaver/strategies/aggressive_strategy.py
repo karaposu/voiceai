@@ -41,12 +41,27 @@ class AggressiveStrategy(InjectionStrategy):
         1. Any reasonable detection
         2. Any pending context
         3. Minimal time spacing
+        
+        Becomes even more aggressive with server VAD + auto-response.
         """
+        
+        # Adapt based on VAD mode
+        vad_mode = getattr(state, 'vad_mode', None)
+        auto_response = getattr(state, 'auto_response', True)
+        injection_mode = getattr(state, 'injection_mode', 'adaptive')
+        
+        # Very aggressive for server VAD with auto-response
+        if vad_mode == 'server' and auto_response:
+            effective_threshold = self.confidence_threshold * 0.6  # Much lower
+            effective_interval = max(1, self.min_interval_seconds // 5)
+        else:
+            effective_threshold = self.confidence_threshold
+            effective_interval = self.min_interval_seconds
         
         # Quick cooldown check
         if self.last_injection:
             time_since = datetime.now() - self.last_injection
-            if time_since < timedelta(seconds=self.min_interval_seconds):
+            if time_since < timedelta(seconds=effective_interval):
                 # Still check for critical contexts
                 for context in available_context.values():
                     if context.priority_value >= ContextPriority.CRITICAL.value:
@@ -69,7 +84,7 @@ class AggressiveStrategy(InjectionStrategy):
         # Find any detection above threshold
         valid_detection = None
         for detection in detections:
-            if detection.detected and detection.confidence >= self.confidence_threshold:
+            if detection.detected and detection.confidence >= effective_threshold:
                 valid_detection = detection
                 break
         
@@ -116,13 +131,15 @@ class AggressiveStrategy(InjectionStrategy):
             )
         
         # Even without detection, inject low priority after some time
-        if self.get_injection_rate(60) < 0.5:  # Less than 30 per minute
+        # Extra aggressive in server+auto mode
+        target_rate = 0.8 if (vad_mode == 'server' and auto_response) else 0.5
+        if self.get_injection_rate(60) < target_rate:
             return InjectionDecision(
                 should_inject=True,
                 context_to_inject=best_context,
                 priority=0.3,
                 reason="maintaining_injection_rate",
-                timing="next_turn"
+                timing="immediate" if injection_mode == "immediate" else "next_turn"
             )
         
         return InjectionDecision(

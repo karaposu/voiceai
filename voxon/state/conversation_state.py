@@ -3,14 +3,21 @@ Conversation State Management
 
 Clean, immutable state representation for voice conversations.
 Designed to be thread-safe and integrate seamlessly with the event system.
+
+NOTE: Moved from voxengine to voxon for better separation of concerns.
+VoxEngine handles low-level voice I/O, while Voxon manages conversation orchestration.
 """
 
 from __future__ import annotations
 from dataclasses import dataclass, field, replace
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, List, Dict, Any, Literal, TYPE_CHECKING
 from datetime import datetime
 from enum import Enum
 import uuid
+
+if TYPE_CHECKING:
+    # Import only for type checking to avoid circular imports
+    from voxengine.state import AudioState, ConnectionState
 
 
 class ConversationStatus(str, Enum):
@@ -79,52 +86,8 @@ class Turn:
         return replace(self, **changes)
 
 
-@dataclass(frozen=True)
-class AudioState:
-    """Audio-specific state"""
-    is_listening: bool = False
-    is_playing: bool = False
-    input_device_id: Optional[int] = None
-    output_device_id: Optional[int] = None
-    
-    # VAD state
-    vad_active: bool = False
-    last_speech_timestamp: Optional[datetime] = None
-    silence_duration_ms: float = 0.0
-    
-    # Audio metrics
-    input_volume_db: float = -60.0
-    output_volume_db: float = -60.0
-    audio_latency_ms: float = 0.0
-    
-    def evolve(self, **changes) -> 'AudioState':
-        """Create a new state with specified changes"""
-        return replace(self, **changes)
-
-
-@dataclass(frozen=True)
-class ConnectionState:
-    """Connection-specific state"""
-    is_connected: bool = False
-    connection_id: Optional[str] = None
-    connected_at: Optional[datetime] = None
-    provider: str = "openai"
-    
-    # Connection metrics
-    latency_ms: float = 0.0
-    messages_sent: int = 0
-    messages_received: int = 0
-    bytes_sent: int = 0
-    bytes_received: int = 0
-    
-    # Error tracking
-    last_error: Optional[str] = None
-    error_count: int = 0
-    reconnect_count: int = 0
-    
-    def evolve(self, **changes) -> 'ConnectionState':
-        """Create a new state with specified changes"""
-        return replace(self, **changes)
+# AudioState and ConnectionState are now imported from voxengine.state
+# as they are low-level engine states
 
 
 @dataclass(frozen=True)
@@ -171,9 +134,9 @@ class ConversationState:
     started_at: datetime = field(default_factory=datetime.now)
     last_activity_at: datetime = field(default_factory=datetime.now)
     
-    # Sub-states
-    connection: ConnectionState = field(default_factory=ConnectionState)
-    audio: AudioState = field(default_factory=AudioState)
+    # Sub-states (will be initialized with proper imports)
+    connection: 'ConnectionState' = field(default_factory=lambda: _get_connection_state())
+    audio: 'AudioState' = field(default_factory=lambda: _get_audio_state())
     metrics: ConversationMetrics = field(default_factory=ConversationMetrics)
     
     # Conversation data
@@ -262,3 +225,16 @@ class ConversationState:
                 "interruption_count": self.metrics.interruption_count
             }
         }
+
+
+# Helper functions to avoid circular imports
+def _get_audio_state():
+    """Get AudioState class from voxengine"""
+    from voxengine.state import AudioState
+    return AudioState()
+
+
+def _get_connection_state():
+    """Get ConnectionState class from voxengine"""
+    from voxengine.state import ConnectionState
+    return ConnectionState()

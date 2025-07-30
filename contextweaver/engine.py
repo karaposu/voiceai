@@ -11,6 +11,7 @@ from datetime import datetime
 
 from .detectors import (
     BaseDetector, 
+    DetectionResult,
     SilenceDetector,
     PauseDetector, 
     TopicChangeDetector
@@ -31,7 +32,9 @@ class ContextWeaver:
         self,
         strategy: Optional[InjectionStrategy] = None,
         detectors: Optional[List[BaseDetector]] = None,
-        logger: Optional[logging.Logger] = None
+        logger: Optional[logging.Logger] = None,
+        parallel_detection: bool = True,
+        detection_timeout_ms: int = 50
     ):
         self.logger = logger or logging.getLogger(__name__)
         
@@ -52,6 +55,10 @@ class ContextWeaver:
         # State
         self.is_active = False
         self.monitoring_task: Optional[asyncio.Task] = None
+        
+        # Performance settings
+        self.parallel_detection = parallel_detection
+        self.detection_timeout_ms = detection_timeout_ms
         
     async def start(self):
         """Start the context injection engine"""
@@ -126,14 +133,11 @@ class ContextWeaver:
         # Clean expired contexts
         self._clean_expired_contexts()
         
-        # Run all detectors
-        detections = []
-        for detector in self.detectors:
-            try:
-                result = await detector.detect(state)
-                detections.append(result)
-            except Exception as e:
-                self.logger.error(f"Detector {detector.__class__.__name__} failed: {e}")
+        # Choose detection mode
+        if self.parallel_detection:
+            detections = await self._run_parallel_detection(state)
+        else:
+            detections = await self._run_sequential_detection(state)
         
         # Let strategy decide
         decision = await self.strategy.decide(
@@ -149,6 +153,88 @@ class ContextWeaver:
             return decision.context_to_inject
             
         return None
+    
+    async def _run_parallel_detection(self, state: Any) -> List[DetectionResult]:
+        """Run all detectors in parallel"""
+        detection_tasks = []
+        detector_names = []
+        
+        for detector in self.detectors:
+            detector_names.append(detector.__class__.__name__)
+            # Create task with timeout to prevent hanging
+            task = self._detect_with_timeout(detector, state, self.detection_timeout_ms)
+            detection_tasks.append(task)
+        
+        # Execute all detections in parallel
+        start_time = asyncio.get_event_loop().time()
+        detection_results = await asyncio.gather(*detection_tasks, return_exceptions=True)
+        detection_time = (asyncio.get_event_loop().time() - start_time) * 1000
+        
+        # Process results
+        detections = []
+        for i, result in enumerate(detection_results):
+            if isinstance(result, Exception):
+                self.logger.error(f"Detector {detector_names[i]} failed: {result}")
+                # Add failed detection result
+                detections.append(DetectionResult(
+                    detected=False,
+                    confidence=0.0,
+                    timestamp=datetime.now(),
+                    metadata={"error": str(result), "detector": detector_names[i]}
+                ))
+            else:
+                detections.append(result)
+        
+        self.logger.debug(f"Parallel detection completed in {detection_time:.2f}ms with {len(detections)} detectors")
+        return detections
+    
+    async def _run_sequential_detection(self, state: Any) -> List[DetectionResult]:
+        """Run all detectors sequentially (fallback mode)"""
+        detections = []
+        start_time = asyncio.get_event_loop().time()
+        
+        for detector in self.detectors:
+            try:
+                result = await detector.detect(state)
+                detections.append(result)
+            except Exception as e:
+                self.logger.error(f"Detector {detector.__class__.__name__} failed: {e}")
+                detections.append(DetectionResult(
+                    detected=False,
+                    confidence=0.0,
+                    timestamp=datetime.now(),
+                    metadata={"error": str(e), "detector": detector.__class__.__name__}
+                ))
+        
+        detection_time = (asyncio.get_event_loop().time() - start_time) * 1000
+        self.logger.debug(f"Sequential detection completed in {detection_time:.2f}ms with {len(detections)} detectors")
+        return detections
+    
+    async def _detect_with_timeout(self, detector: BaseDetector, state: Any, timeout_ms: int) -> DetectionResult:
+        """
+        Run detector with timeout to prevent blocking.
+        
+        Args:
+            detector: Detector to run
+            state: Current state
+            timeout_ms: Timeout in milliseconds
+            
+        Returns:
+            DetectionResult
+        """
+        try:
+            return await asyncio.wait_for(
+                detector.detect(state),
+                timeout=timeout_ms / 1000  # Convert to seconds
+            )
+        except asyncio.TimeoutError:
+            self.logger.warning(f"Detector {detector.__class__.__name__} timed out after {timeout_ms}ms")
+            return DetectionResult(
+                detected=False,
+                confidence=0.0,
+                timestamp=datetime.now(),
+                metadata={"error": "timeout", "timeout_ms": timeout_ms}
+            )
     
     def get_relevant_contexts(
         self,
