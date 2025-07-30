@@ -13,7 +13,7 @@ from contextweaver.strategies import (
     ConservativeStrategy, AggressiveStrategy, AdaptiveStrategy
 )
 from contextweaver.detectors import DetectionResult
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from datetime import datetime
 import time
 

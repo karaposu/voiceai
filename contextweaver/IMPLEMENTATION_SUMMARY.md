@@ -99,7 +99,7 @@ context_weaver = ContextWeaver(
 from contextweaver import ContextWeaver
 from contextweaver.strategies import AdaptiveStrategy
 from contextweaver.detectors import SilenceDetector, ConversationFlowDetector
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver import ContextToInject, InjectionTiming, ContextPriority
 
 # Initialize with parallel detection
 context_weaver = ContextWeaver(

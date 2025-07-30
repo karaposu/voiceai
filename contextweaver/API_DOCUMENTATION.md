@@ -10,7 +10,7 @@ ContextWeaver is a sophisticated context injection system for AI conversations t
 from contextweaver import ContextWeaver
 from contextweaver.strategies import AdaptiveStrategy
 from contextweaver.detectors import SilenceDetector, ConversationFlowDetector
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver import ContextToInject, InjectionTiming, ContextPriority
 
 # Initialize ContextWeaver
 context_weaver = ContextWeaver(

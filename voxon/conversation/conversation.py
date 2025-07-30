@@ -9,7 +9,7 @@ import uuid
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 class Conversation:

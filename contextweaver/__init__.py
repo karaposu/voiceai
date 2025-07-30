@@ -8,11 +8,15 @@ Detects optimal moments and strategies for context integration.
 from .engine import ContextWeaver
 from .detectors import SilenceDetector, PauseDetector, TopicChangeDetector
 from .strategies import InjectionStrategy
+from .schema import ContextToInject, InjectionTiming, ContextPriority
 
 __all__ = [
     "ContextWeaver",
     "SilenceDetector", 
     "PauseDetector",
     "TopicChangeDetector",
-    "InjectionStrategy"
+    "InjectionStrategy",
+    "ContextToInject",
+    "InjectionTiming",
+    "ContextPriority"
 ]

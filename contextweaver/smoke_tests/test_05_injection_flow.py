@@ -11,7 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from contextweaver import ContextWeaver
 from contextweaver.strategies import ConservativeStrategy, AggressiveStrategy
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from datetime import datetime
 import time
 

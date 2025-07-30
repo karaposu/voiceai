@@ -27,16 +27,7 @@ The VoiceAI system consists of four main modules working together:
 │ • Audio streaming │    │ • Detects opportunities  │
 │ • Speech ↔ Text   │    │ • Manages contexts       │
 │ • VAD handling    │    │ • Learning system        │
-└───────────────────┘    └────────┬──────────────────┘
-                                  │
-                         ┌────────▼──────────────────┐
-                         │    ContextEngine         │
-                         │  (Schema & Data Layer)   │
-                         │                          │
-                         │ • Context data structure │
-                         │ • Priority system        │
-                         │ • Timing control         │
-                         └────────────────────────────┘
+└───────────────────┘    └───────────────────────────┘
 ```
 
 ## Module Documentation
@@ -70,33 +61,27 @@ The VoiceAI system consists of four main modules working together:
    - Session management ([details](sessions.md))
    - Conversation templates
 
-4. **[ContextEngine](contextengine.md)** - Context data structures
-   - Schema definitions
-   - Priority system
-   - Timing enumerations
-   - Condition framework
-
 ### System Documentation
 
-5. **[Event System](events.md)** - Complete event reference
+4. **[Event System](events.md)** - Complete event reference
    - Modern EventType system
    - Event flow patterns
    - Advanced event handling
    - Migration from callbacks
 
-6. **[Provider System](providers.md)** - Voice AI backend abstraction
+5. **[Provider System](providers.md)** - Voice AI backend abstraction
    - Available providers (OpenAI, Mock, Custom)
    - Provider interface
    - Implementation guide
    - Provider comparison
 
-7. **[Session Management](sessions.md)** - Conversation continuity
+6. **[Session Management](sessions.md)** - Conversation continuity
    - Session lifecycle
    - Memory management
    - User adaptation
    - Analytics and monitoring
 
-8. **[Parallel Detection](parallel_detection.md)** - Performance optimization
+7. **[Parallel Detection](parallel_detection.md)** - Performance optimization
    - Why parallel detection matters
    - Implementation details
    - Performance benchmarks
@@ -235,7 +220,7 @@ from voxon import Voxon, VoxonConfig
 from voxengine import VoiceEngine, VoiceEngineConfig
 from contextweaver import ContextWeaver, AdaptiveStrategy
 from contextweaver.detectors import SilenceDetector, ConversationFlowDetector
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver import ContextToInject, InjectionTiming, ContextPriority
 
 # 1. Initialize engines
 voice_engine = VoiceEngine(VoiceEngineConfig(

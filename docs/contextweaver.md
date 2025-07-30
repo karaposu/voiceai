@@ -16,7 +16,6 @@ ContextWeaver is an intelligent context injection system that enhances AI conver
 
 ### Integration Requirements
 - **Conversation State** - Access to current conversation state
-- **Context Engine Schema** - ContextToInject data structures
 - **Event System** - For real-time conversation monitoring
 
 ### Configuration
@@ -198,7 +197,11 @@ class CustomStrategy(InjectionStrategy):
 
 ### 3. **Context Schema**
 
+ContextWeaver includes built-in schema definitions for context data:
+
 ```python
+from contextweaver import ContextToInject, InjectionTiming, ContextPriority
+
 @dataclass
 class ContextToInject:
     # Content
@@ -216,6 +219,23 @@ class ContextToInject:
     ttl_seconds: Optional[int]       # Expiration
     max_injections: Optional[int]    # Limit
 ```
+
+**InjectionTiming Options:**
+- `IMMEDIATE` - Inject as soon as possible
+- `NEXT_TURN` - At speaker change
+- `NEXT_PAUSE` - During next silence
+- `ON_TOPIC` - When topic matches
+- `ON_TRIGGER` - On specific event
+- `SCHEDULED` - At specific time
+- `LAZY` - Whenever convenient
+- `MANUAL` - Only when requested
+
+**ContextPriority Levels:**
+- `CRITICAL` (10) - Must be delivered
+- `HIGH` (8) - Important
+- `MEDIUM` (5) - Standard
+- `LOW` (3) - Nice to have
+- `BACKGROUND` (1) - Only if nothing else
 
 ## Integration Points
 
@@ -325,6 +345,8 @@ await context_weaver.start()
 
 ### Adding Context
 ```python
+from contextweaver import ContextToInject, InjectionTiming, ContextPriority
+
 # Add knowledge base context
 context = ContextToInject(
     information={

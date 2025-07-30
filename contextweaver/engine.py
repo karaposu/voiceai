@@ -17,7 +17,7 @@ from .detectors import (
     TopicChangeDetector
 )
 from .strategies import InjectionStrategy, ConservativeStrategy
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 class ContextWeaver:

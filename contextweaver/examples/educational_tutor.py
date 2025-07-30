@@ -19,7 +19,7 @@ from contextweaver.detectors import (
     ConversationFlowDetector,
     ConversationPhase
 )
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from voxon import Voxon, VoxonConfig
 from voxengine import VoiceEngine, VoiceEngineConfig
 

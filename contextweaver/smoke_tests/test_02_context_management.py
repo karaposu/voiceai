@@ -10,7 +10,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from contextweaver import ContextWeaver
-from contextengine.schema import (
+from contextweaver.schema import (
     ContextToInject, InjectionTiming, ContextPriority,
     create_immediate_context, create_conditional_context
 )

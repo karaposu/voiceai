@@ -1,4 +1,4 @@
-# here is contextengine/schema.py
+# Schema definitions for ContextWeaver
 
 
 from dataclasses import dataclass, field

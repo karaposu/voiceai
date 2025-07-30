@@ -17,7 +17,7 @@ from voxengine import VoiceEngine, VoiceEngineConfig
 from contextweaver import ContextWeaver
 from contextweaver.strategies import AdaptiveStrategy
 from contextweaver.detectors import SilenceDetector, PauseDetector
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 class MockVoiceEngine:

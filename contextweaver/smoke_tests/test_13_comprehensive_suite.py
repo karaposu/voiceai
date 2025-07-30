@@ -28,7 +28,7 @@ from contextweaver.detectors import (
     SilenceDetector, PauseDetector, TopicChangeDetector,
     ResponseTimingDetector, ConversationFlowDetector
 )
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from voxon.state import Message, SpeakerRole, ConversationStatus
 
 

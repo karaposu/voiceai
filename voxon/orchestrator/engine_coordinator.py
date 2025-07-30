@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime
 
 from voxengine.events import EventType
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from .vad_adapter import VADModeAdapter
 from .response_controller import ResponseController, ResponseMode
 from .injection_window import InjectionWindowManager

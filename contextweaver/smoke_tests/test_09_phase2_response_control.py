@@ -16,7 +16,7 @@ from voxon.orchestrator import (
     ResponseController, ResponseMode,
     InjectionWindowManager, WindowType
 )
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 class TestPhase2ResponseControl:

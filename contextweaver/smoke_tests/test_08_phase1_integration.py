@@ -16,7 +16,7 @@ from contextweaver.strategies import (
 from contextweaver.detectors import (
     SilenceDetector, PauseDetector, TopicChangeDetector
 )
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 from voxon.orchestrator.engine_coordinator import EngineCoordinator
 from voxon.orchestrator.vad_adapter import VADModeAdapter
 from datetime import datetime

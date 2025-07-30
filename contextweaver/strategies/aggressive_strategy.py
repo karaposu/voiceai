@@ -7,7 +7,7 @@ Actively injects context to enhance conversation.
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
 from .base import InjectionStrategy, InjectionDecision
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 class AggressiveStrategy(InjectionStrategy):

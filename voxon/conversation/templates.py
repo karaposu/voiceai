@@ -6,7 +6,7 @@ Pre-defined conversation patterns and flows.
 
 from dataclasses import dataclass
 from typing import Dict, Any, List, Optional
-from contextengine.schema import ContextToInject, InjectionTiming, ContextPriority
+from contextweaver.schema import ContextToInject, InjectionTiming, ContextPriority
 
 
 @dataclass
